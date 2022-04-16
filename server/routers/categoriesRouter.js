@@ -9,40 +9,49 @@ router.get("/api/categories", async (req, res) => {
 });
 
 router.get("/api/categories/:id", async (req, res) => {
+    
     const categoryid = Number(req.params.id);
     const category = await db.get(`SELECT * FROM categories where id = ?;`, [categoryid]);
-    console.log(category);
     if (category) {
-        return res.send({ data: category});
+        return res.send({ data: category });
     }
     res.send({ error: `No category by id: ${categoryid}` })
 })
 
 router.post("/api/categories", async (req, res) => {
-    const { category } = req.body;
-    const { changes } = await db.run(`INSERT INTO categories (category) VALUES (?);`, [category]);
-    res.send({ rowsAffected: changes });
+    if (req.session.admin === true) {
+        const { category } = req.body;
+        const { changes } = await db.run(`INSERT INTO categories (category) VALUES (?);`, [category]);
+        return res.send({ rowsAffected: changes });
+    }
+    res.send({error: "You are not authorized to make this request"})
 });
 
 router.patch("/api/categories/:id", async (req, res) => {
-    const categoryid = Number(req.params.id);
-    const foundCategory = await db.get(`SELECT * FROM categories where id = ?;`, [categoryid]);
-    if (foundCategory) {
-        const categoryToPatch = req.body;
-        const { category } = { ...foundCategory, ...categoryToPatch};
-        const { changes } = await db.run(`UPDATE categories
-            SET category = ? WHERE id = ?;`, [category, categoryid]);
-        return res.send({ rowsAffected: changes });
-    };
-    res.send({error: `No category by id: ${categoryid}`})
+    if (req.session.admin === true) {
+        const categoryid = Number(req.params.id);
+        const foundCategory = await db.get(`SELECT * FROM categories where id = ?;`, [categoryid]);
+        if (foundCategory) {
+            const categoryToPatch = req.body;
+            const { category } = { ...foundCategory, ...categoryToPatch};
+            const { changes } = await db.run(`UPDATE categories
+                SET category = ? WHERE id = ?;`, [category, categoryid]);
+            return res.send({ rowsAffected: changes });
+        };
+        return res.send({error: `No category by id: ${categoryid}`})
+    }
+    res.send({error: "You are not authorized to make this request"})
 });
 
 router.delete("/api/categories/:id", async (req, res) => {
-    const categoryid = Number(req.params.id);
-    const { changes } = await db.run(`DELETE FROM categories WHERE id = ?`, categoryid);
-    if (changes !== 0) {
-        return res.send({ rowsDeleted: changes })
+    if (req.session.admin === true) {
+        const categoryid = Number(req.params.id);
+        const { changes } = await db.run(`DELETE FROM categories WHERE id = ?`, categoryid);
+        if (changes !== 0) {
+            return res.send({ rowsDeleted: changes })
+        }
+        return res.send({error: `No category by id: ${categoryid}`})
     }
-    res.send({error: `No category by id: ${categoryid}`})
+    res.send({error: "You are not authorized to make this request"})
 });
 export default router;

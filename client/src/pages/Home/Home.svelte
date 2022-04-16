@@ -1,15 +1,27 @@
 <script>
     import { Router, Link, Route } from "svelte-navigator";
-    
+    import { onMount } from "svelte";
+    import { baseURL } from "../../store/generalStore.js";
 
-    const categories = [ "category1", "category2", "category3", "category4", "category5" ]
-</script>
+    let categories = "";
+
+    onMount(async () => {
+        const response = await fetch($baseURL + "/api/categories");
+        const { data:categoriesArray } = await response.json();
+        categories = categoriesArray;
+        if (categories.length > 5) {
+            categories.splice(5);
+        }
+    });
+    
+    
+</script>-
 
 <home>
     <h1>Welcome to the Kea Boutique!</h1>
     <div id="category-highlights">
         {#each categories as category}
-            <div class="category"><Link to="categories/{category}"><h3 class="header">{category}</h3></Link></div>
+            <div class="category"><Link to="categories/{category.id}"><h3 class="header">{category.category}</h3></Link></div>
         {/each}
     </div>
 </home>
