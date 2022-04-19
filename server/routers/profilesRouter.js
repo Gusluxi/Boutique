@@ -1,5 +1,7 @@
 import { json, Router } from "express";
-import { loginRouter, signupRouter } from "../password.js"
+import { loginRouter, signupRouter } from "../password.js";
+import { sendEmail } from "../nodemailer.js"
+
 const router = Router();
 const saltRounds = 12;
 import db from "../database/createConnection.js";
@@ -67,6 +69,7 @@ router.post("/auth/signup", async (req, res) => {
     if (newUser.email && newUser.username && newUser.password) {
         const hashedPassword = await signupRouter(newUser.password, saltRounds)
         const { changes } = await db.run(`INSERT INTO profiles (username, email, password) VALUES (?, ?, ?);`, [newUser.username, newUser.email, hashedPassword]);
+        sendEmail(newUser.email, "Welcome to Kea Boutique", "Hi " + newUser.username + ", We hope you enjoy your stay!");
         return res.send({ rowsAffected: changes })
     }
     res.send({ error: "Missing user data"})

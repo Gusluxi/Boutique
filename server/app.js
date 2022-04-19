@@ -11,7 +11,7 @@ import path from "path";
 
 //Variables
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 
 const baseLimiter = rateLimit({
 	windowMs: 10 * 60 * 1000, // 10 minutes
