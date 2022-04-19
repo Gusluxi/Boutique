@@ -2,9 +2,10 @@
     import { Router, Link, Route } from "svelte-navigator";
     import { onMount } from "svelte";
     import { baseURL } from "../../store/generalStore.js";
+    import { user } from "../../store/profileStore.js";
 
     let categories = "";
-
+    console.log($user);
     onMount(async () => {
         const response = await fetch($baseURL + "/api/categories");
         const { data:categoriesArray } = await response.json();
@@ -18,7 +19,7 @@
 </script>-
 
 <home>
-    <h1>Welcome to the Kea Boutique!</h1>
+    <h1>Welcome {#if $user.loggedIn} {$user.currentUser.username} {/if} to the Kea Boutique!</h1>
     <div id="category-highlights">
         {#each categories as category}
             <div class="category"><Link to="categories/{category.id}"><h3 class="header">{category.category}</h3></Link></div>

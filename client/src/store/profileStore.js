@@ -1,7 +1,3 @@
 import { writable } from "svelte/store";
 
-export const loggedInUser = writable({
-    username: "",
-    loggedIn: false,
-    
-})
+export const user = writable({ loggedIn: false });

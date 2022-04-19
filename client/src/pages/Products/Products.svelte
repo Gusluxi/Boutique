@@ -1,5 +1,6 @@
 <script>
     const productid = window.location.pathname.split("/").pop();
+    import ProductComponent from "../../components/products/ProductComponent.svelte";
     import { Link } from "svelte-navigator";
     import { onMount } from "svelte";
     import { baseURL } from "../../store/generalStore.js";
@@ -15,10 +16,15 @@
 </script>
 
 <h1>All Products</h1>
-<div id="products-wrapper">
-    {#each products as product}
-        <div class="product">
-            <h2>{product.title} - {product.description} - {product.price}</h2>
-        </div>
+<div id="products-area">
+    {#each products as product (product.id)}
+        <ProductComponent product={product}/>
     {/each}
 </div>
+
+<style>
+    #products-area {
+        display: flex;
+        flex-wrap: wrap;
+    }
+</style>

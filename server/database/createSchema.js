@@ -28,9 +28,9 @@ await db.exec(`CREATE TABLE IF NOT EXISTS products (
 
 await db.exec(`CREATE TABLE IF NOT EXISTS profiles (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    username VARCHAR(70) NOT NULL,
-    email VARCHAR(120) NOT NULL,
-    password VARCHAR(120) NOT NULL,
+    username VARCHAR(20) NOT NULL,
+    email VARCHAR(320) NOT NULL,
+    password VARCHAR(72) NOT NULL,
     admin BOOLEAN NOT NULL DEFAULT false);`
 ); 
 
@@ -52,7 +52,7 @@ if (isInDeleteMode) {
     ('Earings', 'Adviced for people with holes in their ears', 52.75, 4),
     ('Cheese Cake', 'Very delecious cake', 15, 5),
     ('Ginger Beer', 'Used for drinks, but is also good for your stomach', 5.5, 5),
-    ('Google.com', 'Web domain is probably pretty expensive', 950500100200300.5, 6),
+    ('Google.com', 'Web domain is probably pretty expensive', 950500.5, 6),
     ('Samelle-tis.com', 'Web domain for a tissue company', 15000.10, 6),
     ('Piano', 'Very musical piano with all the sounds', 3400.35, 7),
     ('Trumpet', 'Makes a funny sound', 800.10, 7)
