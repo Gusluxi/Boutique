@@ -45,9 +45,6 @@
 			document.getElementById("search-link").click();
 		};
 	};
-	function updateCart() {
-		cartAmount = $cartContent.length;
-	}
 
 </script>
 
@@ -75,7 +72,6 @@
 	<main>
 	<Route path="/" component={Home} />
     <Route path="/cart" component={Cart} />
-	<Route path="/checkout" component={Checkout} />
     <Route path="/categories" component={Categories} />
 	<Route path="/categories/*" component={Category} />
 	<Route path="/search" component={Search} />
@@ -84,7 +80,11 @@
 	<Route path="/login" component={Login} />
 	<Route path="/signup" component={Signup} />
 	<PrivateRoute path="/profile" let:location >
-		<Profile/>
+		<Profile />
+	</PrivateRoute>
+		
+	<PrivateRoute path="/checkout" let:location >
+		<Checkout />
 	</PrivateRoute>
 	</main>
 </Router>
